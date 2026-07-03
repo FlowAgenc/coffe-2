@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RUOLA — Specialty Coffee</title>
+    <meta name="description" content="RUOLA — specialty кофейня в Москве. Отбираем лучшие зерна, обжариваем с любовью, подаём с заботой." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ===================== RESET & BASE ===================== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #F8F7F5;
+            --white: #FFFFFF;
+            --black: #1A1814;
+            --graphite: #2D2B27;
+            --beige: #EAE6DE;
+            --beige2: #D4CEBC;
+            --muted: #8A8578;
+            --coffee: #3D2B1F;
+            --coffee2: #6B4226;
+            --accent: #C8A97E;
+            --accent2: #E8D5B4;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: var(--bg);
+            color: var(--black);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ===================== CUSTOM CURSOR ===================== */
+        .cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--coffee);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width .25s, height .25s, background .25s;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 38px;
+            height: 38px;
+            border: 1.5px solid var(--coffee2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            opacity: .55;
+            transition: width .4s, height .4s;
+        }
+        @media (hover: none) {
+            .cursor,
+            .cursor-ring {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* ===================== SCROLLBAR ===================== */
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--coffee2);
+            border-radius: 2px;
+        }
+
+        /* ===================== GRAIN ===================== */
+        .grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: .028;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ===================== NAV ===================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 64px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 40px;
+            transition: background .4s, backdrop-filter .4s, box-shadow .4s;
+        }
+        nav.scrolled {
+            background: rgba(248, 247, 245, .94);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 1px 0 rgba(61, 43, 31, .07);
+        }
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--graphite);
+            text-decoration: none;
+            opacity: .6;
+            transition: opacity .3s;
+            cursor: pointer;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            opacity: 1;
+        }
+        .nav-cta {
+            background: var(--coffee);
+            color: var(--white);
+            padding: 11px 26px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .03em;
+            text-decoration: none;
+            transition: background .3s, transform .2s;
+            cursor: pointer;
+            border: none;
+            font-family: 'Manrope', sans-serif;
+            flex-shrink: 0;
+        }
+        .nav-cta:hover {
+            background: var(--coffee2);
+            transform: translateY(-1px);
+        }
+        .nav-burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            flex-shrink: 0;
+        }
+        .nav-burger span {
+            display: block;
+            width: 24px;
+            height: 1.5px;
+            background: var(--graphite);
+            transition: all .3s;
+        }
+
+        /* ===================== PAGES ===================== */
+        .page {
+            display: none;
+            animation: fadePage .5s ease both;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadePage {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===================== HERO ===================== */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: start;
+            padding: 100px 64px 80px;
+            gap: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: var(--beige);
+            z-index: 0;
+            border-radius: 0 0 0 100px;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 20px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--coffee2);
+            margin-bottom: 28px;
+        }
+        .eyebrow::before {
+            content: '';
+            display: block;
+            width: 28px;
+            height: 1px;
+            background: currentColor;
+        }
+
+        h1.hero-title {
+            font-size: clamp(48px, 7vw, 94px);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -.045em;
+            color: var(--black);
+            margin-bottom: 26px;
+        }
+        h1.hero-title em {
+            font-style: italic;
+            font-weight: 300;
+            color: var(--coffee2);
+        }
+
+        .hero-desc {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.72;
+            color: var(--muted);
+            max-width: 440px;
+            margin-bottom: 44px;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        /* ===================== BUTTONS ===================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 34px;
+            border-radius: 40px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: .02em;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all .3s cubic-bezier(.16, 1, .3, 1);
+        }
+        .btn-primary {
+            background: var(--coffee);
+            color: var(--white);
+        }
+        .btn-primary:hover {
+            background: var(--coffee2);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(61, 43, 31, .2);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--graphite);
+            border: 1.5px solid rgba(45, 43, 39, .18);
+        }
+        .btn-outline:hover {
+            border-color: var(--coffee2);
+            color: var(--coffee2);
+            transform: translateY(-2px);
+        }
+        .btn-arrow {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        /* ===================== HERO IMAGE ===================== */
+        .hero-image {
+            position: relative;
+            z-index: 1;
+            align-self: center;
+        }
+        .hero-img-frame {
+            width: 100%;
+            aspect-ratio: 4/5.2;
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+        }
+        .hero-img-bg {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(150deg, #5C3D2A 0%, #3D2416 45%, #231409 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-img-bg img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .hero-badge {
+            position: absolute;
+            bottom: -18px;
+            left: -18px;
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(61, 43, 31, .18);
+            z-index: 2;
+        }
+        .hero-badge-num {
+            font-size: 27px;
+            font-weight: 800;
+            color: var(--coffee);
+            line-height: 1;
+        }
+        .hero-badge-lbl {
+            font-size: 9.5px;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: .05em;
+            text-align: center;
+            margin-top: 3px;
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 64px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+        .scroll-bar {
+            width: 56px;
+            height: 1px;
+            background: rgba(138, 133, 120, .2);
+            overflow: hidden;
+        }
+        .scroll-bar::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--coffee2);
+            animation: scrollAnim 2.2s 1.5s infinite;
+        }
+
+        /* ===================== MARQUEE ===================== */
+        .marquee-wrap {
+            background: var(--accent2);
+            padding: 17px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 1px solid rgba(61, 43, 31, .07);
+            border-bottom: 1px solid rgba(61, 43, 31, .07);
+        }
+        .marquee-track {
+            display: inline-flex;
+            gap: 52px;
+            animation: marquee 22s linear infinite;
+        }
+        .marquee-item {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--coffee2);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .marquee-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--coffee2);
+            opacity: .4;
+        }
+
+        /* ===================== SECTIONS SHARED ===================== */
+        section {
+            padding: 130px 64px;
+        }
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .section-label span {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--coffee2);
+        }
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 28px;
+            height: 1px;
+            background: var(--coffee2);
+        }
+        h2.section-title {
+            font-size: clamp(32px, 4.5vw, 58px);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -.04em;
+            color: var(--black);
+            margin-bottom: 24px;
+        }
+        h2.section-title em {
+            font-style: italic;
+            font-weight: 300;
+            color: var(--coffee2);
+        }
+
+        /* ===================== ABOUT ===================== */
+        .about {
+            background: var(--bg);
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .about-imgs {
+            position: relative;
+        }
+        .about-main {
+            width: 100%;
+            aspect-ratio: .78;
+            border-radius: 32px;
+            overflow: hidden;
+            background: #2E1C0F;
+            position: relative;
+        }
+        .about-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .about-stat-pill {
+            position: absolute;
+            top: 36px;
+            right: -36px;
+            background: var(--white);
+            border-radius: 18px;
+            padding: 18px 22px;
+            box-shadow: 0 20px 56px rgba(61, 43, 31, .12);
+        }
+        .pill-num {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--coffee);
+            line-height: 1;
+        }
+        .pill-lbl {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 3px;
+        }
+        .about-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--muted);
+            margin-bottom: 36px;
+        }
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+        .astat {
+            background: var(--beige);
+            border-radius: 20px;
+            padding: 22px 18px;
+            text-align: center;
+        }
+        .astat-n {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--coffee);
+        }
+        .astat-l {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* ===================== FEATURES ===================== */
+        .features {
+            background: var(--coffee);
+            padding: 100px 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .features-glow1 {
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200, 169, 126, .1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .features-glow2 {
+            position: absolute;
+            bottom: -100px;
+            left: 18%;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200, 169, 126, .07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .features-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 56px;
+            position: relative;
+            z-index: 1;
+        }
+        .features .section-label::before {
+            background: var(--accent);
+        }
+        .features .section-label span {
+            color: var(--accent);
+        }
+        .features h2.section-title {
+            color: var(--white);
+            margin-bottom: 0;
+        }
+        .features h2.section-title em {
+            color: var(--accent);
+        }
+        .features-sub {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .45);
+            max-width: 320px;
+            text-align: right;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .feat-card {
+            background: rgba(255, 255, 255, .055);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 24px;
+            padding: 34px 26px;
+            transition: all .4s cubic-bezier(.16, 1, .3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .feat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(200, 169, 126, .14) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity .4s;
+        }
+        .feat-card:hover {
+            background: rgba(255, 255, 255, .1);
+            transform: translateY(-7px);
+            border-color: rgba(200, 169, 126, .28);
+        }
+        .feat-card:hover::before {
+            opacity: 1;
+        }
+        .feat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(200, 169, 126, .14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 22px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .feat-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 11px;
+            line-height: 1.3;
+        }
+        .feat-desc {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .48);
+        }
+
+        /* ===================== GALLERY (одно фото img16) ===================== */
+        .gallery {
+            background: var(--bg);
+        }
+        .gallery-single {
+            margin-top: 52px;
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+            background: #2E1C0F;
+        }
+        .gallery-single img {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: cover;
+            display: block;
+            transition: transform .65s cubic-bezier(.16, 1, .3, 1);
+        }
+        .gallery-single:hover img {
+            transform: scale(1.02);
+        }
+        .gallery-caption {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 40px;
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            pointer-events: none;
+        }
+        @media (max-width: 860px) {
+            .gallery-caption {
+                bottom: 16px;
+                left: 16px;
+                font-size: 12px;
+                padding: 8px 18px;
+            }
+        }
+
+        /* ===================== LOCATIONS (без верхней части) ===================== */
+        .locations {
+            background: var(--bg);
+        }
+        .locs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-top: 54px;
+        }
+        .loc-card {
+            border-radius: 26px;
+            overflow: hidden;
+            border: 1px solid rgba(61, 43, 31, .07);
+            transition: all .4s cubic-bezier(.16, 1, .3, 1);
+            background: var(--white);
+        }
+        .loc-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 28px 76px rgba(61, 43, 31, .1);
+        }
+        .loc-body {
+            padding: 26px;
+            background: var(--white);
+        }
+        .loc-name {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 5px;
+        }
+        .loc-addr {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+            line-height: 1.55;
+        }
+        .loc-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--coffee2);
+            margin-bottom: 22px;
+        }
+        .loc-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: blink 2.2s infinite;
+        }
+        .loc-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 22px;
+            border-radius: 32px;
+            border: 1.5px solid rgba(61, 43, 31, .14);
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--coffee);
+            background: transparent;
+            cursor: pointer;
+            transition: all .3s;
+            text-decoration: none;
+        }
+        .loc-btn:hover {
+            background: var(--coffee);
+            color: var(--white);
+            border-color: var(--coffee);
+        }
+
+        /* ===================== REVIEWS ===================== */
+        .reviews {
+            background: var(--beige);
+        }
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-top: 54px;
+        }
+        .rev-card {
+            background: var(--white);
+            border-radius: 26px;
+            padding: 34px;
+            border: 1px solid transparent;
+            transition: all .35s cubic-bezier(.16, 1, .3, 1);
+        }
+        .rev-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(61, 43, 31, .08);
+            border-color: rgba(200, 169, 126, .3);
+        }
+        .rev-rating {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--coffee2);
+            margin-bottom: 18px;
+            letter-spacing: .04em;
+        }
+        .rev-text {
+            font-size: 15px;
+            line-height: 1.78;
+            color: var(--graphite);
+            margin-bottom: 26px;
+            font-style: italic;
+        }
+        .rev-author {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .rev-av {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+        .rev-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+        }
+        .rev-meta {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* ===================== CONTACT SECTION ===================== */
+        .contact-section {
+            background: var(--bg);
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 54px;
+            align-items: start;
+        }
+        .contact-info h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+        .contact-info p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+            font-size: 15px;
+            color: var(--graphite);
+        }
+        .contact-detail a {
+            color: var(--coffee2);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .contact-detail a:hover {
+            text-decoration: underline;
+        }
+        .contact-social {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .contact-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1.5px solid rgba(61, 43, 31, .14);
+            color: var(--coffee2);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all .3s;
+            letter-spacing: .03em;
+        }
+        .contact-social a:hover {
+            background: var(--coffee);
+            border-color: var(--coffee);
+            color: var(--white);
+        }
+
+        /* ===================== CTA ===================== */
+        .cta-section {
+            background: var(--black);
+            text-align: center;
+            padding: 140px 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-glow {
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200, 169, 126, .1) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .cta-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 1;
+        }
+        h2.cta-title {
+            font-size: clamp(40px, 6.5vw, 90px);
+            font-weight: 800;
+            line-height: 1.04;
+            letter-spacing: -.045em;
+            color: var(--white);
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 1;
+        }
+        h2.cta-title em {
+            font-style: italic;
+            font-weight: 300;
+            color: var(--accent);
+        }
+        .cta-sub {
+            font-size: 17px;
+            color: rgba(255, 255, 255, .45);
+            margin-bottom: 46px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+        .cta-section .btn-primary {
+            background: var(--accent);
+            color: var(--coffee);
+            font-size: 15px;
+            padding: 17px 46px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 18px 56px rgba(200, 169, 126, .28);
+        }
+        .cta-section .btn-primary:hover {
+            background: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 24px 60px rgba(200, 169, 126, .2);
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background: var(--coffee);
+            padding: 80px 64px 40px;
+        }
+        .foot-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 56px;
+            margin-bottom: 56px;
+        }
+        .foot-logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -.05em;
+            color: var(--white);
+            margin-bottom: 14px;
+        }
+        .foot-logo span {
+            color: var(--accent);
+        }
+        .foot-desc {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .46);
+            max-width: 270px;
+        }
+        .foot-social {
+            display: flex;
+            gap: 10px;
+            margin-top: 26px;
+        }
+        .fsoc {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            color: rgba(255, 255, 255, .55);
+            transition: all .3s;
+            letter-spacing: .03em;
+        }
+        .fsoc:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--coffee);
+        }
+        .foot-col-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-bottom: 18px;
+        }
+        .foot-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+        .foot-links a {
+            font-size: 14px;
+            color: rgba(255, 255, 255, .46);
+            text-decoration: none;
+            transition: color .3s;
+            cursor: pointer;
+        }
+        .foot-links a:hover {
+            color: var(--accent);
+        }
+        .foot-bot {
+            border-top: 1px solid rgba(255, 255, 255, .1);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .foot-copy {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .28);
+        }
+        .foot-copy a {
+            color: rgba(255, 255, 255, .4);
+            text-decoration: none;
+            transition: color .3s;
+        }
+        .foot-copy a:hover {
+            color: var(--accent);
+        }
+        .footer-credit {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, .3);
+        }
+        .footer-credit a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: .04em;
+        }
+        .footer-credit a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===================== REVEAL ===================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .85s cubic-bezier(.16, 1, .3, 1), transform .85s cubic-bezier(.16, 1, .3, 1);
+        }
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===================== KEYFRAMES ===================== */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+        @keyframes scrollAnim {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        @keyframes marquee {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .35;
+            }
+        }
+
+        /* ===================== HERO ANIMATIONS ===================== */
+        .h-anim-1 {
+            animation: fadeUp .85s .15s both;
+        }
+        .h-anim-2 {
+            animation: fadeUp .9s .3s both;
+        }
+        .h-anim-3 {
+            animation: fadeUp .85s .46s both;
+        }
+        .h-anim-4 {
+            animation: fadeUp .85s .6s both;
+        }
+        .h-anim-5 {
+            animation: fadeUp .85s .9s both;
+        }
+        .hero-image {
+            animation: fadeUp .9s .38s both;
+        }
+
+        /* ===================== MODAL ===================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: var(--white);
+            border-radius: 32px;
+            max-width: 460px;
+            width: 100%;
+            padding: 48px 40px 40px;
+            position: relative;
+            animation: fadeUp .4s both;
+            box-shadow: 0 48px 120px rgba(0, 0, 0, .3);
+        }
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--muted);
+            transition: color .3s;
+            font-family: 'Manrope', sans-serif;
+            line-height: 1;
+        }
+        .modal-close:hover {
+            color: var(--coffee);
+        }
+        .modal h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 8px;
+            letter-spacing: -.03em;
+        }
+        .modal p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .modal label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--graphite);
+            margin-bottom: 6px;
+            letter-spacing: .04em;
+        }
+        .modal input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(61, 43, 31, .12);
+            font-family: 'Manrope', sans-serif;
+            font-size: 16px;
+            transition: border .3s;
+            background: var(--bg);
+            color: var(--black);
+            outline: none;
+        }
+        .modal input:focus {
+            border-color: var(--coffee2);
+        }
+        .modal .field-group {
+            margin-bottom: 18px;
+        }
+        .modal .btn-primary {
+            width: 100%;
+            justify-content: center;
+            padding: 16px;
+            font-size: 15px;
+            margin-top: 8px;
+        }
+        .modal-error {
+            color: #D32F2F;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 6px;
+            display: none;
+        }
+        .modal-error.show {
+            display: block;
+        }
+        .modal-success {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .modal-success h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--coffee);
+        }
+        .modal-success p {
+            color: var(--muted);
+            margin-top: 6px;
+        }
+        .modal-success .btn {
+            margin-top: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+        .modal-form.hidden {
+            display: none;
+        }
+        .modal-success.hidden {
+            display: none;
+        }
+
+        /* ===================== MENU PAGE (список) ===================== */
+        .menu-section {
+            background: var(--beige);
+            padding: 120px 64px;
+        }
+        .menu-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+        }
+        .menu-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .menu-category {
+            margin-bottom: 40px;
+        }
+        .menu-category-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--coffee2);
+            border-bottom: 2px solid var(--coffee2);
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+        }
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 6px 0;
+            font-size: 15px;
+            border-bottom: 1px dashed rgba(61, 43, 31, .1);
+        }
+        .menu-item-row:last-child {
+            border-bottom: none;
+        }
+        .menu-item-name {
+            font-weight: 500;
+            color: var(--black);
+        }
+        .menu-item-price {
+            font-weight: 600;
+            color: var(--coffee);
+            white-space: nowrap;
+            margin-left: 20px;
+        }
+        .menu-item-sub {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+        }
+        .menu-item-row .menu-item-name-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 1100px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .foot-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 36px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .locs-grid,
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            nav {
+                padding: 0 32px;
+                gap: 24px;
+            }
+            .nav-links {
+                gap: 24px;
+            }
+        }
+
+        /* ===================== TABLET (961–1100) ===================== */
+        @media (min-width: 961px) and (max-width: 1100px) {
+            .hero {
+                padding: 100px 40px 70px;
+                gap: 36px;
+            }
+            section {
+                padding: 100px 40px;
+            }
+        }
+
+        @media (max-width: 860px) {
+            nav {
+                padding: 0 24px;
+                gap: 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .nav-burger {
+                display: flex;
+            }
+            section {
+                padding: 80px 24px;
+            }
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 80px 24px 60px;
+                gap: 36px;
+                align-items: start;
+            }
+            .hero-bg-right {
+                display: none;
+            }
+            .hero-image {
+                order: -1;
+                align-self: center;
+            }
+            .hero-scroll {
+                display: none;
+            }
+            h1.hero-title {
+                font-size: clamp(38px, 10vw, 56px);
+            }
+            .hero-content {
+                padding-top: 0;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            .about-stat-pill {
+                position: static;
+                margin-top: 16px;
+                display: inline-block;
+            }
+            .features {
+                padding: 80px 24px;
+            }
+            .features-head {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+            .features-sub {
+                text-align: left;
+                max-width: 100%;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-single img {
+                max-height: 300px;
+            }
+            .menu-section {
+                padding: 80px 24px;
+            }
+            .menu-head {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            .menu-list {
+                max-width: 100%;
+            }
+            .menu-item-row {
+                font-size: 14px;
+                padding: 8px 0;
+            }
+            .locs-grid {
+                grid-template-columns: 1fr;
+            }
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-section {
+                padding: 100px 24px;
+            }
+            footer {
+                padding: 60px 24px 36px;
+            }
+            .foot-top {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .about-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .modal {
+                padding: 32px 24px 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 70px 16px 40px;
+            }
+            h1.hero-title {
+                font-size: clamp(32px, 12vw, 44px);
+            }
+            .hero-desc {
+                font-size: 15px;
+            }
+            .hero-btns {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+                width: 100%;
+            }
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+            .menu-item-row {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .menu-item-price {
+                margin-left: 0;
+            }
+            .modal {
+                padding: 24px 18px 24px;
+            }
+            .modal h2 {
+                font-size: 22px;
+            }
+            .gallery-caption {
+                bottom: 12px;
+                left: 12px;
+                font-size: 11px;
+                padding: 6px 14px;
+            }
+            .features-grid .feat-card {
+                padding: 24px 18px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 860px) {
+            .hero {
+                padding: 90px 32px 60px;
+            }
+            h1.hero-title {
+                font-size: clamp(44px, 9vw, 60px);
+            }
+            .hero-btns .btn {
+                width: auto;
+            }
+        }
+
+        /* ===================== SMALL PHONES ===================== */
+        @media (max-width: 400px) {
+            .hero-badge {
+                width: 92px;
+                height: 92px;
+                bottom: -14px;
+                left: 10px;
+            }
+            .hero-badge-num {
+                font-size: 21px;
+            }
+            .hero-badge-lbl {
+                font-size: 8.5px;
+            }
+            .about-stat-pill {
+                right: 8px;
+                top: 20px;
+                padding: 14px 16px;
+            }
+            .pill-num {
+                font-size: 24px;
+            }
+            nav {
+                padding: 0 16px;
+                gap: 12px;
+            }
+            .nav-cta {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
+            .modal-overlay {
+                padding: 12px;
+            }
+        }
+
+        /* ===================== TOUCH TARGETS ===================== */
+        @media (hover: none) and (pointer: coarse) {
+            .btn,
+            .nav-cta,
+            .loc-btn,
+            .contact-social a,
+            .fsoc {
+                min-height: 44px;
+            }
+            .nav-burger {
+                padding: 10px;
+            }
+            .modal input {
+                font-size: 16px;
+            }
+        }
+
+        /* ===================== PREVENT HORIZONTAL SCROLL ===================== */
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="ring"></div>
+    <div class="grain"></div>
+
+    <!-- ======= NAV ======= -->
+    <nav id="nav">
+        <ul class="nav-links">
+            <li><a href="#about">О нас</a></li>
+            <li><a href="#locations">Адреса</a></li>
+            <li><a href="#reviews">Отзывы</a></li>
+            <li><a href="#contacts">Контакты</a></li>
+            <li><a data-page="menu" class="menu-link">Меню</a></li>
+        </ul>
+        <button class="nav-cta" id="openBookingBtn">Забронировать</button>
+        <button class="nav-burger" aria-label="Открыть меню">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- ======= PAGE: HOME ======= -->
+    <!-- ============================================================ -->
+    <div class="page active" id="page-home">
+
+        <!-- ======= HERO ======= -->
+        <section class="hero" id="home">
+            <div class="hero-bg-right"></div>
+
+            <div class="hero-content">
+                <div class="eyebrow h-anim-1"><span>Specialty Coffee · Москва</span></div>
+                <h1 class="hero-title h-anim-2">
+                    Кофе,<br>который <em>меняет</em><br>утро
+                </h1>
+                <p class="hero-desc h-anim-3">
+                    Мы отбираем лучшие моносорта с трёх континентов, обжариваем вручную и раскрываем каждый нюанс вкуса в каждой чашке.
+                </p>
+                <div class="hero-btns h-anim-4">
+                    <a data-page="menu" class="btn btn-primary">Смотреть меню <span class="btn-arrow">→</span></a>
+                    <button class="btn btn-outline" id="openBookingBtn2">Забронировать</button>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <div class="hero-img-frame">
+                    <div class="hero-img-bg">
+                        <img src="img1.jpg" alt="img1 – кофе в чашке" />
+                        <svg style="position:absolute;top:20px;left:50%;transform:translateX(-50%);opacity:.12" width="280" height="60" viewBox="0 0 280 60">
+                            <path d="M10 40 Q40 18 70 40 Q100 62 130 40 Q160 18 190 40 Q220 62 250 40 Q270 28 280 32" stroke="#C8A97E" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="hero-badge">
+                    <span class="hero-badge-num">100+</span>
+                    <span class="hero-badge-lbl">сортов<br>кофе</span>
+                </div>
+            </div>
+
+            <div class="hero-scroll h-anim-5">
+                <div class="scroll-bar"></div>
+                Листать вниз
+            </div>
+        </section>
+
+        <!-- ======= MARQUEE ======= -->
+        <div class="marquee-wrap" aria-hidden="true">
+            <div class="marquee-track">
+                <span class="marquee-item">Specialty Coffee <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Single Origin <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Авторская обжарка <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Натуральные продукты <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Уютная атмосфера <span class="marquee-dot"></span></span>
+                <span class="marquee-item">SCA 80+ <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Specialty Coffee <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Single Origin <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Авторская обжарка <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Натуральные продукты <span class="marquee-dot"></span></span>
+                <span class="marquee-item">Уютная атмосфера <span class="marquee-dot"></span></span>
+                <span class="marquee-item">SCA 80+ <span class="marquee-dot"></span></span>
+            </div>
+        </div>
+
+        <!-- ======= ABOUT ======= -->
+        <section class="about" id="about">
+            <div class="about-grid">
+                <div class="about-imgs reveal">
+                    <div class="about-main">
+                        <img src="img2.jpg" alt="img2 – интерьер кофейни" />
+                    </div>
+                    <div class="about-stat-pill">
+                        <div class="pill-num">5+</div>
+                        <div class="pill-lbl">лет в specialty</div>
+                    </div>
+                </div>
+
+                <div class="about-content reveal">
+                    <div class="section-label"><span>О кофейне</span></div>
+                    <h2 class="section-title">Мы — не просто<br><em>кофейня</em></h2>
+                    <p class="about-text">
+                        RUOLA — это пространство для тех, кто ценит честный вкус. Мы сами отбираем зерно на фермах Эфиопии, Колумбии и Кении, обжариваем небольшими партиями и готовим каждую чашку как отдельное произведение.
+                    </p>
+                    <div class="about-stats">
+                        <div class="astat">
+                            <div class="astat-n">100+</div>
+                            <div class="astat-l">Сортов<br>кофе</div>
+                        </div>
+                        <div class="astat">
+                            <div class="astat-n">5000+</div>
+                            <div class="astat-l">Гостей<br>в месяц</div>
+                        </div>
+                        <div class="astat">
+                            <div class="astat-n">3</div>
+                            <div class="astat-l">Точки<br>в Москве</div>
+                        </div>
+                    </div>
+                    <a data-page="menu" class="btn btn-primary">Наше меню <span class="btn-arrow">→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======= FEATURES ======= -->
+        <section class="features" id="features">
+            <div class="features-glow1"></div>
+            <div class="features-glow2"></div>
+            <div class="features-head">
+                <div>
+                    <div class="section-label"><span>Наши ценности</span></div>
+                    <h2 class="section-title">Почему<br><em>RUOLA</em></h2>
+                </div>
+                <p class="features-sub">Каждая деталь продумана для вашего удовольствия — от зерна до интерьера</p>
+            </div>
+            <div class="features-grid">
+                <div class="feat-card reveal">
+                    <div class="feat-icon">Спешелти</div>
+                    <h3 class="feat-title">Specialty Coffee</h3>
+                    <p class="feat-desc">Только зерна категории SCA 80+, отобранные лично на фермах трёх континентов</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon">Десерты</div>
+                    <h3 class="feat-title">Авторские десерты</h3>
+                    <p class="feat-desc">Выпекаем каждое утро — без консервантов, с сезонными ингредиентами из нашего сада</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon">Натурально</div>
+                    <h3 class="feat-title">Натуральные продукты</h3>
+                    <p class="feat-desc">Работаем только с проверенными поставщиками и фермерами Подмосковья</p>
+                </div>
+                <div class="feat-card reveal">
+                    <div class="feat-icon">Уют</div>
+                    <h3 class="feat-title">Уютная атмосфера</h3>
+                    <p class="feat-desc">Интерьер, который располагает к работе, тихим встречам и моментам тишины</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======= GALLERY ======= -->
+        <section class="gallery" id="gallery">
+            <div class="section-label reveal"><span>Атмосфера</span></div>
+            <h2 class="section-title reveal">Пространство, где<br><em>хочется остаться</em></h2>
+            <div class="gallery-single reveal">
+                <img src="img16.jpg" alt="img16 – уютный зал кафе" />
+                <span class="gallery-caption">Просторный зал с мягким светом</span>
+            </div>
+        </section>
+
+        <!-- ======= LOCATIONS ======= -->
+        <section class="locations" id="locations">
+            <div class="section-label reveal"><span>Адреса</span></div>
+            <h2 class="section-title reveal">Найдите нас<br><em>ближе к вам</em></h2>
+            <div class="locs-grid">
+                <div class="loc-card reveal">
+                    <div class="loc-body">
+                        <h3 class="loc-name">Большая Никитская</h3>
+                        <p class="loc-addr">ул. Большая Никитская, 22, Москва</p>
+                        <div class="loc-status"><span class="loc-dot"></span>Открыто · 8:00 — 22:00</div>
+                        <a href="https://yandex.ru/maps/?rtext=~55.7558,37.6063" target="_blank" class="loc-btn">Открыть карту →</a>
+                    </div>
+                </div>
+                <div class="loc-card reveal">
+                    <div class="loc-body">
+                        <h3 class="loc-name">Арт-Плей</h3>
+                        <p class="loc-addr">ул. Нижняя Сыромятническая, 10, стр. 3</p>
+                        <div class="loc-status"><span class="loc-dot"></span>Открыто · 9:00 — 21:00</div>
+                        <a href="https://yandex.ru/maps/?rtext=~55.7494,37.6537" target="_blank" class="loc-btn">Открыть карту →</a>
+                    </div>
+                </div>
+                <div class="loc-card reveal">
+                    <div class="loc-body">
+                        <h3 class="loc-name">Патриаршие пруды</h3>
+                        <p class="loc-addr">Малый Патриарший пер., 5, Москва</p>
+                        <div class="loc-status"><span class="loc-dot"></span>Открыто · 8:00 — 23:00</div>
+                        <a href="https://yandex.ru/maps/?rtext=~55.7646,37.5867" target="_blank" class="loc-btn">Открыть карту →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======= REVIEWS ======= -->
+        <section class="reviews" id="reviews">
+            <div class="section-label reveal"><span>Отзывы</span></div>
+            <h2 class="section-title reveal">Что говорят<br><em>гости</em></h2>
+            <div class="reviews-grid">
+                <div class="rev-card reveal">
+                    <div class="rev-rating">Рейтинг: 5 из 5</div>
+                    <p class="rev-text">«Лучший фильтр-кофе в Москве. Персонал знает о каждом зерне всё — прямо как сомелье, только с кофе. Теперь хожу каждое утро»</p>
+                    <div class="rev-author">
+                        <div class="rev-av" style="background:#6B4226">АМ</div>
+                        <div>
+                            <div class="rev-name">Александр Миронов</div>
+                            <div class="rev-meta">Постоянный гость · Патриаршие</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rev-card reveal">
+                    <div class="rev-rating">Рейтинг: 5 из 5</div>
+                    <p class="rev-text">«Атмосфера — отдельный вид искусства. Сидела три часа с ноутбуком, и никто не выгонял. Ещё и принесли воду без просьбы. Редкость!»</p>
+                    <div class="rev-author">
+                        <div class="rev-av" style="background:#8B5E3C">КВ</div>
+                        <div>
+                            <div class="rev-name">Катерина Власова</div>
+                            <div class="rev-meta">Дизайнер · Большая Никитская</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rev-card reveal">
+                    <div class="rev-rating">Рейтинг: 5 из 5</div>
+                    <p class="rev-text">«Чизкейк с базиликом и Эфиопия Иргачеф — это сочетание меняет представление о завтраке. Приехал специально из Питера, не пожалел»</p>
+                    <div class="rev-author">
+                        <div class="rev-av" style="background:#5C3D2A">ДС</div>
+                        <div>
+                            <div class="rev-name">Дмитрий Соколов</div>
+                            <div class="rev-meta">Фотограф · Арт-Плей</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======= CONTACTS ======= -->
+        <section class="contact-section" id="contacts">
+            <div class="section-label reveal"><span>Связаться</span></div>
+            <h2 class="section-title reveal">Мы на связи<br><em>всегда</em></h2>
+            <div class="contact-grid">
+                <div class="contact-info reveal">
+                    <h3>Напишите или позвоните</h3>
+                    <p>Мы ответим на все вопросы, поможем с бронированием и расскажем о новинках.</p>
+                    <div class="contact-detail">Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></div>
+                    <div class="contact-detail">Email: <a href="mailto:hello@ruola.ru">hello@ruola.ru</a></div>
+                    <div class="contact-detail">Адреса: Большая Никитская, 22 · Арт-Плей · Патриаршие</div>
+                    <div class="contact-social">
+                        <a href="https://t.me/PortfolioFlowWeb" target="_blank" aria-label="Telegram разработчика">Telegram</a>
+                        <a href="#" aria-label="Instagram">Instagram</a>
+                        <a href="#" aria-label="VK">VK</a>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <div style="background:var(--beige);border-radius:32px;padding:40px;text-align:center;">
+                        <div style="font-size:36px;margin-bottom:16px;font-weight:300;color:var(--coffee2);">Кофе</div>
+                        <h3 style="font-size:20px;font-weight:700;color:var(--coffee);">Работаем ежедневно</h3>
+                        <p style="color:var(--muted);margin-top:8px;line-height:1.7;">с 8:00 до 23:00</p>
+                        <button class="btn btn-primary" id="openBookingBtn3" style="margin-top:20px;">Забронировать столик</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======= CTA ======= -->
+        <section class="cta-section">
+            <div class="cta-glow"></div>
+            <span class="cta-eyebrow">Ждём вас</span>
+            <h2 class="cta-title reveal">Забронируйте<br>столик <em>сегодня</em></h2>
+            <p class="cta-sub reveal">Мы оставим для вас лучшее место и приготовим любимый напиток заранее</p>
+            <button class="btn btn-primary reveal" id="openBookingBtn4">
+                Забронировать столик <span class="btn-arrow">→</span>
+            </button>
+        </section>
+
+    </div><!-- /page-home -->
+
+    <!-- ============================================================ -->
+    <!-- ======= PAGE: MENU (список) ======= -->
+    <!-- ============================================================ -->
+    <div class="page" id="page-menu">
+        <section class="menu-section" id="menu">
+            <div class="menu-head">
+                <div>
+                    <div class="section-label"><span>Меню</span></div>
+                    <h2 class="section-title">Что мы<br><em>готовим</em></h2>
+                </div>
+                <a href="#home" class="btn btn-outline">На главную →</a>
+            </div>
+
+            <div class="menu-list">
+                <!-- ГОРЯЧИЕ -->
+                <div class="menu-category">
+                    <div class="menu-category-title">ГОРЯЧИЕ</div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Флэт Уайт</span>
+                        <span class="menu-item-price">320 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Эфиопия Иргачеф (фильтр)</span>
+                        <span class="menu-item-price">380 ₽</span>
+                    </div>
+                </div>
+
+                <!-- ХОЛОДНЫЕ -->
+                <div class="menu-category">
+                    <div class="menu-category-title">ХОЛОДНЫЕ</div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Колд Брю</span>
+                        <span class="menu-item-price">420 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Матча Латте</span>
+                        <span class="menu-item-price">380 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Лимонад Бузина</span>
+                        <span class="menu-item-price">320 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Гибискус на льду</span>
+                        <span class="menu-item-price">290 ₽</span>
+                    </div>
+                </div>
+
+                <!-- ЕДА -->
+                <div class="menu-category">
+                    <div class="menu-category-title">ЕДА</div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Авокадо-тост</span>
+                        <span class="menu-item-price">590 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Боул с гранолой</span>
+                        <span class="menu-item-price">520 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Яйца бенедикт</span>
+                        <span class="menu-item-price">680 ₽</span>
+                    </div>
+                </div>
+
+                <!-- АВТОРСКИЕ -->
+                <div class="menu-category">
+                    <div class="menu-category-title">АВТОРСКИЕ</div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Тарт с лимоном</span>
+                        <span class="menu-item-price">390 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Брауни с карамелью</span>
+                        <span class="menu-item-price">340 ₽</span>
+                    </div>
+                    <div class="menu-item-row">
+                        <span class="menu-item-name">Чизкейк Базилик</span>
+                        <span class="menu-item-price">420 ₽</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- /page-menu -->
+
+    <!-- ============================================================ -->
+    <!-- ======= FOOTER ======= -->
+    <!-- ============================================================ -->
+    <footer>
+        <div class="foot-top">
+            <div>
+                <div class="foot-logo">RUOLA</div>
+                <p class="foot-desc">Specialty кофейня в Москве. Отбираем лучшие зерна, обжариваем с любовью, подаём с заботой.</p>
+                <div class="foot-social">
+                    <a href="https://t.me/PortfolioFlowWeb" target="_blank" class="fsoc">Telegram</a>
+                    <a href="#" class="fsoc">Instagram</a>
+                    <a href="#" class="fsoc">VK</a>
+                </div>
+            </div>
+            <div>
+                <div class="foot-col-title">Меню</div>
+                <ul class="foot-links">
+                    <li><a data-page="menu">Кофе</a></li>
+                    <li><a data-page="menu">Завтраки</a></li>
+                    <li><a data-page="menu">Десерты</a></li>
+                    <li><a data-page="menu">Напитки</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="foot-col-title">О нас</div>
+                <ul class="foot-links">
+                    <li><a href="#about">История</a></li>
+                    <li><a href="#about">Обжарка</a></li>
+                    <li><a href="#about">Команда</a></li>
+                    <li><a href="#about">Каппинги</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="foot-col-title">Контакты</div>
+                <ul class="foot-links">
+                    <li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
+                    <li><a href="mailto:hello@ruola.ru">hello@ruola.ru</a></li>
+                    <li><a href="#locations">Большая Никитская, 22</a></li>
+                    <li><a href="#locations">Нижн. Сыромятническая, 10</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="foot-bot">
+            <span class="foot-copy">© 2025 RUOLA. Все права защищены.</span>
+            <span class="foot-copy">Сделано с любовью к кофе</span>
+        </div>
+        <div class="footer-credit">
+            <span style="display:block; margin-bottom:6px; font-size:13px; opacity:0.6;">Сайт создан</span>
+            <a href="https://t.me/PortfolioFlowWeb" target="_blank">@PortfolioFlowWeb</a>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- ======= BOOKING MODAL ======= -->
+    <!-- ============================================================ -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+
+            <div class="modal-form" id="modalForm">
+                <h2>Забронировать столик</h2>
+                <p>Оставьте контакты, и мы подберём для вас лучшее место.</p>
+
+                <div class="field-group">
+                    <label for="bookingName">Ваше имя</label>
+                    <input type="text" id="bookingName" placeholder="Например, Анна" />
+                    <div class="modal-error" id="nameError">Пожалуйста, введите имя</div>
+                </div>
+
+                <div class="field-group">
+                    <label for="bookingPhone">Номер телефона</label>
+                    <input type="tel" id="bookingPhone" placeholder="+7 000 000 00 00" maxlength="18" inputmode="numeric" />
+                    <div class="modal-error" id="phoneError">Введите 10 цифр (без +7)</div>
+                </div>
+
+                <button class="btn btn-primary" id="submitBooking">Забронировать</button>
+            </div>
+
+            <div class="modal-success hidden" id="modalSuccess">
+                <h3>Бронь успешно отправлена!</h3>
+                <p>Мы свяжемся с вами в ближайшее время.</p>
+                <button class="btn btn-primary" id="modalSuccessClose">Отлично</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ======= SCRIPTS ======= -->
+    <!-- ============================================================ -->
+    <script>
+        // ===================== CURSOR =====================
+        (function() {
+            var c = document.getElementById('cursor'),
+                r = document.getElementById('ring');
+            var mx = 0,
+                my = 0,
+                rx = 0,
+                ry = 0;
+            document.addEventListener('mousemove', function(e) {
+                mx = e.clientX;
+                my = e.clientY;
+                c.style.left = mx + 'px';
+                c.style.top = my + 'px';
+            });
+            (function tick() {
+                rx += (mx - rx) * .11;
+                ry += (my - ry) * .11;
+                r.style.left = Math.round(rx) + 'px';
+                r.style.top = Math.round(ry) + 'px';
+                requestAnimationFrame(tick);
+            })();
+            document.querySelectorAll('a,button').forEach(function(el) {
+                el.addEventListener('mouseenter', function() {
+                    c.style.width = '18px';
+                    c.style.height = '18px';
+                    c.style.background = '#C8A97E';
+                    r.style.width = '58px';
+                    r.style.height = '58px';
+                });
+                el.addEventListener('mouseleave', function() {
+                    c.style.width = '10px';
+                    c.style.height = '10px';
+                    c.style.background = '#3D2B1F';
+                    r.style.width = '38px';
+                    r.style.height = '38px';
+                });
+            });
+        })();
+
+        // ===================== NAV SCROLL =====================
+        window.addEventListener('scroll', function() {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // ===================== PAGE ROUTING =====================
+        var pages = {
+            home: document.getElementById('page-home'),
+            menu: document.getElementById('page-menu')
+        };
+
+        var menuLinks = document.querySelectorAll('[data-page="menu"]');
+        var homeLinks = document.querySelectorAll('[href="#home"]');
+        var navLinks = document.querySelectorAll('.nav-links a');
+
+        function showPage(pageId) {
+            Object.keys(pages).forEach(function(key) {
+                pages[key].classList.toggle('active', key === pageId);
+            });
+            navLinks.forEach(function(el) {
+                if (el.dataset.page === pageId) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(function() {
+                var activePage = pages[pageId];
+                var revs = activePage.querySelectorAll('.reveal:not(.in)');
+                revs.forEach(function(el) {
+                    var rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight - 80) {
+                        el.classList.add('in');
+                    }
+                });
+            }, 300);
+        }
+
+        menuLinks.forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('menu');
+            });
+        });
+
+        homeLinks.forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('home');
+                var target = el.getAttribute('href');
+                if (target && target !== '#home') {
+                    var targetEl = document.querySelector(target);
+                    if (targetEl) {
+                        setTimeout(function() {
+                            targetEl.scrollIntoView({ behavior: 'smooth' });
+                        }, 200);
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.nav-links a[href^="#"]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('home');
+                var target = this.getAttribute('href');
+                if (target && target !== '#home') {
+                    var targetEl = document.querySelector(target);
+                    if (targetEl) {
+                        setTimeout(function() {
+                            targetEl.scrollIntoView({ behavior: 'smooth' });
+                        }, 200);
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.menu-head .btn-outline').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('home');
+                var target = this.getAttribute('href');
+                if (target && target !== '#home') {
+                    var targetEl = document.querySelector(target);
+                    if (targetEl) {
+                        setTimeout(function() {
+                            targetEl.scrollIntoView({ behavior: 'smooth' });
+                        }, 200);
+                    }
+                }
+            });
+        });
+
+        // ===================== SCROLL REVEAL =====================
+        var revEls = document.querySelectorAll('.reveal');
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                    var delay = 0;
+                    var siblings = e.target.parentElement ? e.target.parentElement.querySelectorAll('.reveal') : [];
+                    siblings.forEach(function(s, idx) {
+                        if (s === e.target) delay = idx;
+                    });
+                    setTimeout(function() {
+                        e.target.classList.add('in');
+                    }, delay * 75);
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: .08, rootMargin: '0px 0px -50px 0px' });
+        revEls.forEach(function(el) { obs.observe(el); });
+
+        // ===================== PARALLAX HERO =====================
+        window.addEventListener('scroll', function() {
+            var s = window.scrollY;
+            var img = document.querySelector('.hero-image');
+            if (img && s < window.innerHeight) {
+                img.style.transform = 'translateY(' + (s * .07) + 'px)';
+            }
+        });
+
+        // ===================== PHONE MASK =====================
+        var phoneInput = document.getElementById('bookingPhone');
+
+        function formatPhone(raw) {
+            raw = raw.replace(/\D/g, '').slice(0, 10);
+            var parts = [];
+            if (raw.length > 0) parts.push(raw.slice(0, 3));
+            if (raw.length > 3) parts.push(raw.slice(3, 6));
+            if (raw.length > 6) parts.push(raw.slice(6, 8));
+            if (raw.length > 8) parts.push(raw.slice(8, 10));
+            return '+7 ' + parts.join(' ');
+        }
+
+        phoneInput.addEventListener('input', function(e) {
+            var val = this.value;
+            var digits = val.replace(/\D/g, '');
+            if (digits.startsWith('7')) {
+                digits = digits.slice(1);
+            }
+            digits = digits.slice(0, 10);
+            var formatted = formatPhone(digits);
+            this.value = formatted;
+            this.dataset.raw = digits;
+        });
+
+        phoneInput.addEventListener('focus', function() {
+            if (this.value.trim() === '') {
+                this.value = '+7 ';
+            }
+        });
+
+        phoneInput.addEventListener('blur', function() {
+            if (this.dataset.raw === '') {
+                this.value = '';
+            }
+        });
+
+        // ===================== BOOKING MODAL =====================
+        var modal = document.getElementById('bookingModal');
+        var form = document.getElementById('modalForm');
+        var success = document.getElementById('modalSuccess');
+        var nameInput = document.getElementById('bookingName');
+        var nameError = document.getElementById('nameError');
+        var phoneError = document.getElementById('phoneError');
+
+        function openModal() {
+            modal.classList.add('open');
+            form.classList.remove('hidden');
+            success.classList.add('hidden');
+            nameInput.value = '';
+            phoneInput.value = '';
+            phoneInput.dataset.raw = '';
+            nameError.classList.remove('show');
+            phoneError.classList.remove('show');
+            nameInput.focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+        }
+
+        document.getElementById('openBookingBtn').addEventListener('click', openModal);
+        document.getElementById('openBookingBtn2').addEventListener('click', openModal);
+        document.getElementById('openBookingBtn3').addEventListener('click', openModal);
+        document.getElementById('openBookingBtn4').addEventListener('click', openModal);
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalSuccessClose').addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.getElementById('submitBooking').addEventListener('click', function() {
+            var name = nameInput.value.trim();
+            var rawDigits = phoneInput.dataset.raw || '';
+            var valid = true;
+
+            if (!name) {
+                nameError.classList.add('show');
+                valid = false;
+            } else {
+                nameError.classList.remove('show');
+            }
+
+            if (rawDigits.length !== 10) {
+                phoneError.classList.add('show');
+                valid = false;
+            } else {
+                phoneError.classList.remove('show');
+            }
+
+            if (valid) {
+                form.classList.add('hidden');
+                success.classList.remove('hidden');
+            }
+        });
+
+        nameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('submitBooking').click();
+        });
+        phoneInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('submitBooking').click();
+        });
+
+        // ===================== MOBILE BURGER =====================
+        var burger = document.querySelector('.nav-burger');
+        var navLinksEl = document.querySelector('.nav-links');
+        var burgerOpen = false;
+        burger.addEventListener('click', function() {
+            burgerOpen = !burgerOpen;
+            navLinksEl.style.display = burgerOpen ? 'flex' : 'none';
+            if (burgerOpen) {
+                navLinksEl.style.flexDirection = 'column';
+                navLinksEl.style.position = 'absolute';
+                navLinksEl.style.top = '80px';
+                navLinksEl.style.left = '0';
+                navLinksEl.style.right = '0';
+                navLinksEl.style.background = 'rgba(248,247,245,.97)';
+                navLinksEl.style.backdropFilter = 'blur(20px)';
+                navLinksEl.style.padding = '24px 32px';
+                navLinksEl.style.gap = '18px';
+                navLinksEl.style.boxShadow = '0 12px 40px rgba(0,0,0,.08)';
+                navLinksEl.style.borderRadius = '0 0 20px 20px';
+            } else {
+                navLinksEl.style.display = '';
+                navLinksEl.style.flexDirection = '';
+                navLinksEl.style.position = '';
+                navLinksEl.style.top = '';
+                navLinksEl.style.left = '';
+                navLinksEl.style.right = '';
+                navLinksEl.style.background = '';
+                navLinksEl.style.backdropFilter = '';
+                navLinksEl.style.padding = '';
+                navLinksEl.style.gap = '';
+                navLinksEl.style.boxShadow = '';
+                navLinksEl.style.borderRadius = '';
+            }
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(function(a) {
+            a.addEventListener('click', function() {
+                if (burgerOpen) {
+                    burger.click();
+                }
+            });
+        });
+
+        // ===================== KEYBOARD =====================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('open')) {
+                closeModal();
+            }
+        });
+
+        // ===================== DEFAULT PAGE =====================
+        showPage('home');
+
+        console.log('RUOLA — Specialty Coffee');
+        console.log('Разработчик: @PortfolioFlowWeb');
+    </script>
+
+</body>
+</html>
